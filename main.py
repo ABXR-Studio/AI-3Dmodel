@@ -12,6 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import boto3
 import aspose.threed as a3d
 import time
+from numba import cuda 
+
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -96,4 +98,6 @@ async def generate_3d(item: Item, request: Request):
     del latents
     torch.cuda.empty_cache()
     gc.collect()
+    device = cuda.get_current_device()
+    device.reset()
     return list_models
